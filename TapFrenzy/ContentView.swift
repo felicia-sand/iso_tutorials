@@ -61,7 +61,10 @@ enum GameLevel: Int, CaseIterable {
 
 struct ContentView: View {
     @AppStorage("TapFrenzyHighScore") private var tapFrenzyHighScore = 0
+
     @AppStorage("LightItUpHighScore") private var lightItUpHighScore = 0
+    
+    @AppStorage("QuizRushHighScore") private var quizRushHighScore = 0
     
     var body: some View {
         NavigationStack {
@@ -87,7 +90,6 @@ struct ContentView: View {
                     
                     Spacer()
                         .frame(height: 50)
-                    
                     
                     VStack(spacing: 25) {
                         NavigationLink(destination: TapFrenzyView()) {
@@ -125,16 +127,43 @@ struct ContentView: View {
                             .background(RoundedRectangle(cornerRadius: 20).fill(LinearGradient(colors: [.purple, .indigo], startPoint: .leading, endPoint: .trailing)))
                             .shadow(radius: 5)
                         }
+                        
+                        NavigationLink(destination: QuizRushView()) {
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text("Challenge 3")
+                                    .font(.subheadline)
+                                Text("QUIZ RUSH")
+                                    .font(.title2)
+                                    .fontWeight(.heavy)
+                                Text("High Score: \(quizRushHighScore)")
+                                    .font(.caption)
+                                    .opacity(0.8)
+                            }
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
+                            .background(RoundedRectangle(cornerRadius: 20).fill(LinearGradient(colors: [.orange, .red], startPoint: .leading, endPoint: .trailing)))
+                            .shadow(radius: 5)
+                        }
                     }
                     .padding(.horizontal, 30)
                     
                     Spacer()
                 }
             }
+          
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: LeaderboardView()) {
+                        Image(systemName: "trophy.circle.fill")
+                            .font(.title2)
+                            .foregroundStyle(LinearGradient(colors: [.blue, .purple], startPoint: .top, endPoint: .bottom))
+                    }
+                }
+            }
         }
     }
 }
-
 
 struct LightItUpView: View {
     @AppStorage("LightItUpHighScore") private var highScore = 0
@@ -359,6 +388,7 @@ struct LightItUpView: View {
 }
 
 
+
 struct TapFrenzyView: View {
     @State private var score = 0
     @State private var timeRemaining = 10
@@ -532,5 +562,6 @@ struct TapFrenzyView: View {
 #Preview {
     ContentView()
 }
+
 
 

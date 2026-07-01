@@ -1,20 +1,21 @@
 import SwiftUI
 
 struct LeaderboardView: View {
-    // Read the exact same AppStorage keys used in your games
+    
     @AppStorage("TapFrenzyHighScore") private var tapFrenzyHighScore = 0
     @AppStorage("LightItUpHighScore") private var lightItUpHighScore = 0
+    @AppStorage("QuizRushHighScore") private var quizRushHighScore = 0
     
     var body: some View {
         ZStack {
-            // Matching the Game Hub's premium gradient background
+          
             LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.1), Color.purple.opacity(0.2)]),
                            startPoint: .topLeading,
                            endPoint: .bottomTrailing)
                 .ignoresSafeArea()
             
             VStack(spacing: 25) {
-                // Header Block
+                
                 VStack(spacing: 8) {
                     Image(systemName: "trophy.fill")
                         .font(.system(size: 60))
@@ -22,15 +23,15 @@ struct LeaderboardView: View {
                         .shadow(color: .orange.opacity(0.3), radius: 10, x: 0, y: 5)
                         .padding(.top, 20)
                     
-                    Text("HALL OF FAME")
+                    Text("HIGH SCORES")
                         .font(.system(size: 28, weight: .black, design: .rounded))
                         .tracking(3)
                         .foregroundColor(.primary)
                 }
                 
-                // Scores Container List
+             
                 VStack(spacing: 20) {
-                    // Tap Frenzy Row
+                   
                     LeaderboardRow(
                         title: "TAP FRENZY",
                         score: tapFrenzyHighScore,
@@ -38,19 +39,25 @@ struct LeaderboardView: View {
                         gradientColors: [.blue, .cyan]
                     )
                     
-                    // Light It Up Row
+              
                     LeaderboardRow(
                         title: "LIGHT IT UP",
                         score: lightItUpHighScore,
                         icon: "lightbulb.fill",
                         gradientColors: [.purple, .indigo]
                     )
+                    
+                    LeaderboardRow(
+                        title: "QUIZ RUSH",
+                        score: quizRushHighScore,
+                        icon: "bolt.horizontal.fill",
+                        gradientColors: [.orange, .red]
+                    )
                 }
                 .padding(.horizontal, 25)
                 
                 Spacer()
-                
-                // Clear Scores Action Row
+      
                 Button(role: .destructive, action: resetAllScores) {
                     HStack {
                         Image(systemName: "trash.fill")
@@ -74,10 +81,10 @@ struct LeaderboardView: View {
     private func resetAllScores() {
         tapFrenzyHighScore = 0
         lightItUpHighScore = 0
+        quizRushHighScore = 0
     }
 }
 
-// A reusable row component styled specifically for your game hubs look and feel
 struct LeaderboardRow: View {
     let title: String
     let score: Int
@@ -100,9 +107,9 @@ struct LeaderboardRow: View {
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
-                Text("Personal Best")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+               // Text("Personal Best")
+                    //.font(.caption)
+                   // .foregroundColor(.secondary)
             }
             
             Spacer()
@@ -119,3 +126,4 @@ struct LeaderboardRow: View {
         .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 4)
     }
 }
+

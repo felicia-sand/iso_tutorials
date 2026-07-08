@@ -142,7 +142,7 @@ struct ContentView: View {
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding()
-                            .background(RoundedRectangle(cornerRadius: 20).fill(LinearGradient(colors: [.orange, .red], startPoint: .leading, endPoint: .trailing)))
+                            .background(RoundedRectangle(cornerRadius: 20).fill(LinearGradient(colors: [.green, .mint], startPoint: .leading, endPoint: .trailing)))
                             .shadow(radius: 5)
                         }
                     }
@@ -151,16 +151,7 @@ struct ContentView: View {
                     Spacer()
                 }
             }
-          
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: LeaderboardView()) {
-                        Image(systemName: "trophy.circle.fill")
-                            .font(.title2)
-                            .foregroundStyle(LinearGradient(colors: [.blue, .purple], startPoint: .top, endPoint: .bottom))
-                    }
-                }
-            }
+           
         }
     }
 }
@@ -559,9 +550,8 @@ struct TapFrenzyView: View {
     }
 }
 
+
+
 #Preview {
     ContentView()
 }
-
-
-

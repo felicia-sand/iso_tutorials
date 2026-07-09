@@ -29,6 +29,14 @@ struct SettingsTab: View {
         )
     }
 
+    private var appVersion: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
+    }
+
+    private var buildNumber: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "1"
+    }
+
     var body: some View {
         Form {
             Section("Daily Challenge") {
@@ -49,7 +57,7 @@ struct SettingsTab: View {
                         }
                     }
 
-                DatePicker("Pick a time for a challenge", selection: challengeTime, displayedComponents: .hourAndMinute)
+                DatePicker("Reminder Time", selection: challengeTime, displayedComponents: .hourAndMinute)
                     .disabled(!notificationsEnabled)
 
                 if notificationsEnabled {
@@ -62,6 +70,25 @@ struct SettingsTab: View {
             Section {
                 Button("Reset All Stats", role: .destructive) {
                     showResetConfirm = true
+                }
+            }
+
+            Section("About") {
+                LabeledContent("Version", value: appVersion)
+                LabeledContent("Build", value: buildNumber)
+
+                Link(destination: URL(string: "https://example.com/privacy")!) {
+                    Text("Privacy Policy")
+                }
+
+                Link(destination: URL(string: "https://example.com/terms")!) {
+                    Text("Terms of Use")
+                }
+
+                Button("Send Feedback") {
+                    if let url = URL(string: "mailto:support@example.com?subject=TapFrenzy%20Feedback") {
+                        UIApplication.shared.open(url)
+                    }
                 }
             }
         }

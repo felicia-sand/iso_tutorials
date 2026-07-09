@@ -32,14 +32,19 @@ struct StatsTab: View {
             Section("Scores by mode") {
                 Chart(store.sessions) { session in
                     BarMark(
-                        x: .value("Date", session.timestamp, unit: .day),
+                        x: .value("Mode", session.mode.displayName),
                         y: .value("Score", session.score)
                     )
                     .foregroundStyle(by: .value("Mode", session.mode.displayName))
+                    .position(by: .value("Date", session.timestamp))
                 }
                 .frame(height: 220)
+                .chartXAxis {
+                    AxisMarks(values: .automatic) {
+                        AxisValueLabel()
+                    }
+                }
             }
-            
            
             Section("Recent games") {
                 if store.recent.isEmpty {

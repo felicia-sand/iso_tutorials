@@ -3,6 +3,8 @@ import MapKit
 
 struct MapTab: View {
     private var store = SessionStore.shared
+    private var locationService = LocationService.shared
+
     @State private var selectedSessionID: GameSession.ID?
     @State private var cameraPosition: MapCameraPosition = .automatic
 
@@ -14,8 +16,37 @@ struct MapTab: View {
                 ))
                 .tag(session.id)
             }
+
+            UserAnnotation()
         }
         .navigationTitle("Map")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    locationService.refreshLocation()
+                } label: {
+                    Image(systemName: "location.circle")
+                }
+            }
+        }
+        .task {
+            if locationService.authorizationStatus == .notDetermined {
+                locationService.requestPermission()
+            } else {
+                locationService.requestLocation()
+            }
+        }
+        .onChange(of: locationService.currentLocation?.latitude) { _, _ in
+            guard let coordinate = locationService.currentLocation else { return }
+            withAnimation {
+                cameraPosition = .region(
+                    MKCoordinateRegion(
+                        center: coordinate,
+                        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                    )
+                )
+            }
+        }
         .safeAreaInset(edge: .bottom) {
             if let id = selectedSessionID,
                let session = store.sessions.first(where: { $0.id == id }) {
@@ -30,4 +61,3 @@ struct MapTab: View {
         }
     }
 }
-

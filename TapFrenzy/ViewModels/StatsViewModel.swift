@@ -10,8 +10,7 @@ final class StatsViewModel: ObservableObject {
     init(store: SessionStore = .shared) {
         self.store = store
         self.sessions = store.sessions
-        // Keep in sync if SessionStore is @Observable; if you're on ObservableObject
-        // for SessionStore instead, wire this via objectWillChange or a delegate callback.
+     
         refresh()
     }
 

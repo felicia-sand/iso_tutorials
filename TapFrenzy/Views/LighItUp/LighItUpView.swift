@@ -166,6 +166,11 @@ struct LightItUpView: View {
                             .foregroundColor(.orange)
                     }
                     
+                    ShareLink(item: shareText) {
+                        Label("Share Score", systemImage: "square.and.arrow.up")
+                    }
+                    .buttonStyle(.bordered)
+                    
                     Button(action: resetGame) {
                         Text("Play Again")
                             .font(.headline)
@@ -174,6 +179,8 @@ struct LightItUpView: View {
                             .frame(width: 200)
                             .background(Capsule().fill(Color.purple))
                     }
+                    
+                
                 }
             }
             
@@ -192,6 +199,9 @@ struct LightItUpView: View {
         .toolbar(.hidden, for: .tabBar)
     }
     
+    private var shareText: String {
+        "I just scored \(score) on Light It Up — beat that!"
+    }
     
     private func setupLevel() {
        
@@ -262,6 +272,8 @@ struct LightItUpView: View {
             }
         }
     }
+    
+    
     
     private func endGame() {
         isGameOver = true

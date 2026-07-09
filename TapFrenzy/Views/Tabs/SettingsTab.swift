@@ -49,7 +49,7 @@ struct SettingsTab: View {
                         }
                     }
 
-                DatePicker("Challenge time", selection: challengeTime, displayedComponents: .hourAndMinute)
+                DatePicker("Pick a time for a challenge", selection: challengeTime, displayedComponents: .hourAndMinute)
                     .disabled(!notificationsEnabled)
 
                 if notificationsEnabled {

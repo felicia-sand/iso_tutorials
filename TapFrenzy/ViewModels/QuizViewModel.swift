@@ -31,7 +31,8 @@ final class QuizViewModel: ObservableObject {
         "\(min(currentIndex + 1, questions.count)) of \(questions.count)"
     }
 
-    //Fetching
+   
+
 
     func load() async {
         state = .loading
@@ -56,7 +57,7 @@ final class QuizViewModel: ObservableObject {
         Task { await load() }
     }
 
-    // Round Flow
+    
 
     private func loadAnswersForCurrentQuestion() {
         guard let question = currentQuestion else { return }

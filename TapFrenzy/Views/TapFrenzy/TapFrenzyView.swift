@@ -113,7 +113,10 @@ struct TapFrenzyView: View {
                                 .foregroundColor(.orange)
                         }
                         
-                       
+                        ShareLink(item: shareText) {
+                            Label("Share Score", systemImage: "square.and.arrow.up")
+                        }
+                        .buttonStyle(.bordered)
                         
                         Button(action: {
                             self.resetGame()
@@ -135,6 +138,10 @@ struct TapFrenzyView: View {
         .navigationTitle("Tap Frenzy")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
+    }
+    
+    private var shareText: String {
+        "I just scored \(score) on Tap Frenzy — beat that!"
     }
     
     private func handleTap() {

@@ -3,6 +3,7 @@ import SwiftUI
 struct QuizRushView: View {
     @StateObject private var viewModel = QuizViewModel()
     @AppStorage("QuizRushHighScore") private var highScore = 0
+    @State private var hasRecordedThisRound = false
 
     var body: some View {
         ZStack {
@@ -26,10 +27,8 @@ struct QuizRushView: View {
         .task {
             await viewModel.load()
         }
+        .toolbar(.hidden, for: .tabBar)
     }
-
-    
-    // Loading State
 
     private var loadingView: some View {
         VStack(spacing: 20) {
@@ -40,9 +39,6 @@ struct QuizRushView: View {
                 .foregroundColor(.secondary)
         }
     }
-
-    
-    // Error State
 
     private func errorView(message: String) -> some View {
         VStack(spacing: 20) {
@@ -66,9 +62,6 @@ struct QuizRushView: View {
             }
         }
     }
-
-    
-    // Loaded / Playing State
 
     private var quizView: some View {
         VStack(spacing: 25) {
@@ -141,8 +134,10 @@ struct QuizRushView: View {
         .animation(.easeInOut(duration: 0.2), value: viewModel.selectedAnswer)
     }
 
-    
-    // Finished State
+    private var shareText: String {
+        "I just scored \(viewModel.score) on Quiz Rush — beat that!"
+    }
+
     private var finishedView: some View {
         VStack(spacing: 25) {
             Text("Quiz Completed!")
@@ -164,7 +159,13 @@ struct QuizRushView: View {
                     .foregroundColor(.orange)
             }
 
+            ShareLink(item: shareText) {
+                Label("Share Score", systemImage: "square.and.arrow.up")
+            }
+            .buttonStyle(.bordered)
+
             Button(action: {
+                hasRecordedThisRound = false
                 viewModel.playAgain()
             }) {
                 Text("Play Again")
@@ -180,6 +181,18 @@ struct QuizRushView: View {
             if viewModel.score > highScore {
                 highScore = viewModel.score
             }
+
+            guard !hasRecordedThisRound else { return }
+            hasRecordedThisRound = true
+
+            LocationService.shared.requestLocation()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                SessionStore.shared.record(
+                    mode: .quizRush,
+                    score: viewModel.score,
+                    coordinate: LocationService.shared.currentLocation
+                )
+            }
         }
     }
 }
@@ -187,4 +200,3 @@ struct QuizRushView: View {
 #Preview {
     QuizRushView()
 }
-

@@ -82,7 +82,7 @@ final class QuizViewModel: ObservableObject {
             score = max(0, score - 5) // small penalty, never goes negative
         }
 
-        // Brief pause so the correct/wrong flash is visible, then advance.
+     
         Task {
             try? await Task.sleep(nanoseconds: 700_000_000)
             self.advance()

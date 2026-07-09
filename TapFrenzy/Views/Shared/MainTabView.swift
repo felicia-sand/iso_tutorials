@@ -31,9 +31,9 @@ struct MainTabView: View {
                 Label("Settings", systemImage: "gearshape.fill")
             }
         }
-        .onAppear {
-            LocationService.shared.requestPermission()
-        }
+//        .onAppear {
+//            LocationService.shared.requestPermission()
+//        }
     }
 }
 

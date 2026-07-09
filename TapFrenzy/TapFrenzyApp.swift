@@ -37,11 +37,15 @@ import SwiftUI
 @main
 struct TapFrenzyApp: App {
     var body: some Scene {
-        WindowGroup {
-            MainTabView()
-                .onAppear {
-                    LocationService.shared.requestPermission()
-                }
+       WindowGroup {
+        MainTabView()
+              .onAppear {
+                   LocationService.shared.requestPermission()
+            }
         }
     }
 }
+
+ 
+ 
+ 

@@ -12,7 +12,7 @@ struct TriviaResponse: Codable {
     }
 }
 
-// Question Model
+
 
 struct TriviaQuestion: Codable, Identifiable {
     let id = UUID()

@@ -67,7 +67,7 @@ struct LightItUpView: View {
     @State private var currentLevel: GameLevel = .l1
     @State private var showLevelUpFlash = false
     @State private var lives = 3
-    
+    @State private var hasRecordedThisRound = false
 
     let roundTimer = Timer.publish(every: 1.0, on: .main, in: .common).autoconnect()
     
@@ -189,6 +189,7 @@ struct LightItUpView: View {
         }
         .navigationTitle("Light It Up")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .tabBar)
     }
     
     
@@ -267,6 +268,18 @@ struct LightItUpView: View {
         if score > highScore {
             highScore = score
         }
+
+        guard !hasRecordedThisRound else { return }
+        hasRecordedThisRound = true
+
+        LocationService.shared.requestLocation()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            SessionStore.shared.record(
+                mode: .lightItUp,
+                score: score,
+                coordinate: LocationService.shared.currentLocation
+            )
+        }
     }
     
     private func resetGame() {
@@ -275,6 +288,7 @@ struct LightItUpView: View {
         lives = 3
         currentLevel = .l1
         isGameOver = false
+        hasRecordedThisRound = false
         setupLevel()
     }
 }

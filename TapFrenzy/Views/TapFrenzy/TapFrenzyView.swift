@@ -1,10 +1,3 @@
-//
-//  TapFrenzyView.swift
-//  TapFrenzy
-//
-//  Created by Student1 on 2026-07-08.
-//
-
 import SwiftUI
 import Combine
 
@@ -15,6 +8,7 @@ struct TapFrenzyView: View {
     @AppStorage("TapFrenzyHighScore") private var highScore = 0
     
     @State private var buttonOffset = CGSize.zero
+    @State private var hasRecordedThisRound = false
 
     let moveTimer = Timer.publish(every: 1.5, on: .main, in: .common).autoconnect()
     let gameTimer = Timer.publish(every: 1.0, on: .main, in: .common).autoconnect()
@@ -119,6 +113,8 @@ struct TapFrenzyView: View {
                                 .foregroundColor(.orange)
                         }
                         
+                       
+                        
                         Button(action: {
                             self.resetGame()
                         }) {
@@ -138,6 +134,7 @@ struct TapFrenzyView: View {
         }
         .navigationTitle("Tap Frenzy")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .tabBar)
     }
     
     private func handleTap() {
@@ -149,12 +146,25 @@ struct TapFrenzyView: View {
         if score > highScore {
             highScore = score
         }
+
+        guard !hasRecordedThisRound else { return }
+        hasRecordedThisRound = true
+
+        LocationService.shared.requestLocation()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            SessionStore.shared.record(
+                mode: .tapFrenzy,
+                score: score,
+                coordinate: LocationService.shared.currentLocation
+            )
+        }
     }
     
     private func resetGame() {
         score = 0
         timeRemaining = 10
         buttonOffset = .zero
+        hasRecordedThisRound = false
         withAnimation {
             isGameOver = false
         }
